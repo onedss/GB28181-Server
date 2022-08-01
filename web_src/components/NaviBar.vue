@@ -2,7 +2,7 @@
   <header class="main-header">
     <router-link class="logo" style="position: relative;" to="/">
         <span class="logo-mini">{{logoMiniText}}</span>
-        <span class="logo-lg">{{logoText}}</span>
+        <span class="logo-lg">视播一体系统</span>
         <!-- <span class='logo-lg label label-warning' style='position: absolute;top:8px;right: 20px;font-size: 8px;' v-if="versionText">{{versionText}}</span> -->
     </router-link>
 

@@ -120,9 +120,8 @@
     </section>
   </div>
   <footer class="main-footer" v-if="!fullscreen">
-      <span v-if="serverInfo.CopyrightText" v-html="serverInfo.CopyrightText"></span>
-      <span v-else>
-        Copyright © 2021 <a href="//www.liveqing.com" target="_blank">www.liveqing.com</a> All rights reserved.
+      <span>
+        Copyright © 2022 All rights reserved.
       </span>
   </footer>
   <resize-observer @notify="handleResize"/>
