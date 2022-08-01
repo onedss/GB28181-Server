@@ -147,28 +147,28 @@ module.exports = {
         new ExtractTextPlugin("css/[name].[chunkhash:8].css"),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            title: 'LiveGBS',
+            title: 'OneGBS',
             inject: true, // head -> Cannot find element: #app
             chunks: ['index'],
             template: './template.html'
         }),
         new HtmlWebpackPlugin({
             filename: 'login.html',
-            title: 'LiveGBS',
+            title: 'OneGBS',
             inject: true,
             chunks: ['login'],
             template: './template-login.html'
         }),
         new HtmlWebpackPlugin({
             filename: 'play.html',
-            title: 'LiveGBS',
+            title: 'OneGBS',
             inject: true,
             chunks: ['play'],
             template: './template-play.html'
         }),
         new HtmlWebpackPlugin({
             filename: 'playback.html',
-            title: 'LiveGBS',
+            title: 'OneGBS',
             inject: true,
             chunks: ['playback'],
             template: './template-playback.html'

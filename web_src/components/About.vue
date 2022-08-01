@@ -34,7 +34,7 @@
                             </tr>
                             <tr>
                                 <td>软件信息</td>
-                                <td><span id="software-info">{{serverInfo.LogoText === 'LiveGBS' ? serverInfo.Server : (serverInfo.Server||"").replace("LiveCMS", "CMS")}}</span></td>
+                                <td><span id="software-info">{{serverInfo.LogoText === 'OneGBS' ? serverInfo.Server : (serverInfo.Server||"").replace("LiveCMS", "CMS")}}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -71,8 +71,8 @@
                                 <td>机器码</td>
                                 <td>
                                     <span id="key-info">CMS{{(serverInfo.Server||"").indexOf("Linux") >= 0 ? "L":"W"}}{{requestkey}}</span>
-                                    <br v-if="serverInfo.LogoText === 'LiveGBS'">
-                                    <span v-if="serverInfo.LogoText === 'LiveGBS'" style="color:#bbb">(通过邮箱：support@liveqing.com 向商务人员咨询永久授权信息)</span>
+                                    <br v-if="serverInfo.LogoText === 'OneGBS'">
+                                    <span v-if="serverInfo.LogoText === 'OneGBS'" style="color:#bbb">(通过邮箱：support@liveqing.com 向商务人员咨询永久授权信息)</span>
                                 </td>
                             </tr>
                             <tr v-if="!actived || expanded">
@@ -138,7 +138,7 @@
                             </tr>
                             <tr>
                                 <td>软件信息</td>
-                                <td><span id="software-info">{{serverInfo.LogoText === 'LiveGBS' ? smsserverinfo.Server : (smsserverinfo.Server||"").replace("LiveSMS", "SMS")}}</span></td>
+                                <td><span id="software-info">{{serverInfo.LogoText === 'OneGBS' ? smsserverinfo.Server : (smsserverinfo.Server||"").replace("LiveSMS", "SMS")}}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -168,8 +168,8 @@
                                 <td>机器码</td>
                                 <td>
                                     <span id="key-info">SMS{{(smsserverinfo.Server||"").indexOf("Linux") >= 0 ? "L":"W"}}{{smsrequestkey.RequestKey}}</span>
-                                    <br v-if="serverInfo.LogoText === 'LiveGBS'">
-                                    <span v-if="serverInfo.LogoText === 'LiveGBS'" style="color:#bbb">(通过邮箱：support@liveqing.com 向商务人员咨询永久授权信息)</span>
+                                    <br v-if="serverInfo.LogoText === 'OneGBS'">
+                                    <span v-if="serverInfo.LogoText === 'OneGBS'" style="color:#bbb">(通过邮箱：support@liveqing.com 向商务人员咨询永久授权信息)</span>
                                 </td>
                             </tr>
                             <tr v-if="!activedsms || expanded">

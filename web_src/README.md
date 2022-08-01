@@ -1,6 +1,6 @@
 # livecms-web-src
 
-LiveGBS 前端工程源码
+OneGBS 前端工程源码
 
 # 起步
 

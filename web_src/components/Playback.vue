@@ -215,7 +215,7 @@ export default {
   async mounted() {
     var serverInfo = await this.getServerInfo();
     if (serverInfo) {
-      document.title = serverInfo.LogoText || "LiveGBS";
+      document.title = serverInfo.LogoText || "OneGBS";
     }
     var payload = {};
     if(this.token) {

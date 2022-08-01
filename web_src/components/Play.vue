@@ -286,7 +286,7 @@ export default {
     var defShare = "yes";
     var serverInfo = await this.getServerInfo();
     if (serverInfo) {
-      document.title = serverInfo.LogoText || "LiveGBS";
+      document.title = serverInfo.LogoText || "OneGBS";
       defShare = serverInfo.ShowShare === false ? "no" : "yes";
     }
     var payload = {};

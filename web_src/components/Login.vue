@@ -5,7 +5,7 @@
     <div class="login-container">
         <div id="login-panel" :class="['panel', 'panel-primary', {'visible': showPanel == 'login'}]">
             <div class="panel-heading text-center">
-                <h3><b>{{serverInfo.LogoText || "LiveGBS"}} <small v-if="serverInfo.DemoUser" style="color:#fff;"><sup><sup>演示</sup></sup></small></b> - 登录</h3>
+                <h3><b>{{serverInfo.LogoText || "OneGBS"}} <small v-if="serverInfo.DemoUser" style="color:#fff;"><sup><sup>演示</sup></sup></small></b> - 登录</h3>
             </div>
             <div class="panel-body">
                 <br>
@@ -134,7 +134,7 @@ export default {
   async mounted() {
     var serverInfo = await this.getServerInfo();
     if(serverInfo) {
-      document.title = serverInfo.LogoText || "LiveGBS";
+      document.title = serverInfo.LogoText || "OneGBS";
       this.loginRequestMethod = serverInfo.LoginRequestMethod || "POST";
     }
     var userInfo = await this.getUserInfo();

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" v-if="$getQueryString('menu') != 'no'">
-    <NaviBar :logoText="serverInfo.LogoText || 'LiveGBS'" :logoMiniText="serverInfo.LogoMiniText || 'GBS'" :versionText="versionText" @modify-password="$refs['password-modify-dlg'].show()"></NaviBar>
+    <NaviBar :logoText="serverInfo.LogoText || 'OneGBS'" :logoMiniText="serverInfo.LogoMiniText || 'GBS'" :versionText="versionText" @modify-password="$refs['password-modify-dlg'].show()"></NaviBar>
     <Sider :menus="menus"></Sider>
     <VideoDlg ref="videoDlg" fade></VideoDlg>
     <PasswordModifyDlg ref="password-modify-dlg" :pwdLevel="serverInfo.PwdLevel || 0"></PasswordModifyDlg>
@@ -11,7 +11,7 @@
     </div>
     <footer class="main-footer">
       <div class="pull-right hidden-xs hide">
-        {{serverInfo.LogoText || "LiveGBS"}}
+        {{serverInfo.LogoText || "OneGBS"}}
       </div>
       <span v-if="serverInfo.CopyrightText" v-html="serverInfo.CopyrightText"></span>
       <span v-else>
@@ -235,7 +235,7 @@ export default {
       if(this.serverInfo){
         text = this.serverInfo.Server || ""
       }
-      var matchs = text.match(/LiveGBS\/(.+?)\s/i);
+      var matchs = text.match(/OneGBS\/(.+?)\s/i);
       if(matchs) {
         return matchs[1];
       }
