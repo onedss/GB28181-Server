@@ -65,6 +65,7 @@
         <div class="tab-pane" ref="groupTreeWrapper" id="group-tree-wrapper">
           <el-tree ref="queryGroupTree" id="query-group-tree" node-key="key" v-if="showQueryGroupTree" :data="queryGroupTreeDataList"
             :props="treeProps" :load="queryGroupTreeLoad" lazy :empty-text="queryGroupTreeEmptyText"
+            :draggable="hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')" :allow-drag="allowDrag" :allow-drop="allowDrop" @node-drop="handleDrop"
             @node-click="treeNodeClick" @node-contextmenu="treeNodeRightClick">
             <span class="custom-tree-node" slot-scope="{node, data}">
               <span :class="{'text-green': treeLeaf(data) && data.status === 'ON'}">
@@ -78,6 +79,7 @@
           </el-tree>
           <el-tree ref="groupTree" id="group-tree" node-key="key" v-if="showGroupTree" v-show="!showQueryGroupTree"
             :props="treeProps" :load="groupTreeLoad" :filter-node-method="groupTreeFilter" lazy :empty-text="groupTreeEmptyText" :default-expanded-keys="defExpandGroups"
+            :draggable="hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')" :allow-drag="allowDrag" :allow-drop="allowDrop" @node-drop="handleDrop"
             @node-click="treeNodeClick" @node-contextmenu="treeNodeRightClick">
             <span class="custom-tree-node" slot-scope="{node, data}">
               <span :class="{'text-green': treeLeaf(data) && data.status === 'ON'}">
@@ -104,7 +106,7 @@
         <i class="fa fa-refresh"></i> 刷新节点
       </a>
       <a role="button" @click="showNodeAddDlg" v-show="contextMenuNodeData && contextMenuNodeData.custom && hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')">
-        <i class="fa fa-plus"></i> 新建节点
+        <i class="fa fa-plus"></i> 新建分组
       </a>
       <a role="button" @click="showNodeAddDlg" v-show="contextMenuNodeData && !contextMenuNodeData.custom && contextMenuNodeData.manufacturer === 'virtual' && contextMenuNodeData.code && hasAnyRole(serverInfo, userInfo, '超级管理员')">
         <i class="fa fa-plus"></i> 新建节点
@@ -122,13 +124,16 @@
         <i class="fa fa-check"></i> 选择通道
       </a>
       <a role="button" @click="showNodeEditDlg" v-show="contextMenuNodeData && !(contextMenuNodeData.custom && !contextMenuNodeData.code) && hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')">
-        <i class="fa fa-edit"></i> 编辑节点
+        <i class="fa fa-edit"></i> 编辑名称
       </a>
       <a role="button" @click="showNodeShareDlg" v-show="contextMenuNodeData && contextMenuNodeData.code && hasAnyRole(serverInfo, userInfo, '超级管理员')">
         <i class="fa fa-share"></i> 共享节点
       </a>
       <a role="button" @click="removeCustomNode" v-show="contextMenuNodeData && contextMenuNodeData.custom && contextMenuNodeData.code && hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')">
-        <i class="fa fa-remove"></i> 删除节点
+        <i class="fa fa-remove"></i> 删除分组
+      </a>
+      <a role="button" @click="removeCustomNode" v-show="contextMenuNodeData && !contextMenuNodeData.custom && contextMenuNodeData.code && pnode && pnode.data && pnode.data.custom && hasAnyRole(serverInfo, userInfo, '管理员', '超级管理员')">
+        <i class="fa fa-remove"></i> 移出分组
       </a>
       <a role="button" @click="removeVirtualNode" v-show="contextMenuNodeData && !contextMenuNodeData.custom && contextMenuNodeData.manufacturer === 'virtual' && contextMenuNodeData.code && hasAnyRole(serverInfo, userInfo, '超级管理员')">
         <i class="fa fa-remove"></i> 删除节点
@@ -1041,11 +1046,16 @@ export default {
       this.contextMenuVisible = false;
       if(!this.contextMenuNodeData) return;
       var name = this.contextMenuNodeData.customName || this.contextMenuNodeData.name || this.contextMenuNodeData.id;
-      this.$confirm(`确认删除 ${name} ?`, "提示").then(() => {
+      var action = this.contextMenuNodeData.custom ? "删除" : "移出";
+      this.$confirm(`确认${action} ${name} ?`, "提示").then(() => {
         $.get("/api/v1/channel/remove", {
           serial: this.contextMenuNodeData.serial,
           code: this.contextMenuNodeData.code,
         }).always(() => {
+          if(!this.contextMenuNodeData.custom && this.pnode) {
+            this.treeNodeRefresh(this.pnode.parent);
+            return
+          }
           this.treeNodeRefresh(this.pnode);
         });
       }).catch(() => {});
@@ -1447,7 +1457,50 @@ export default {
         })
       }
     },
-  },
+    allowDrag(draggingNode) {
+      if(draggingNode.level < 2) return false;
+      if(!draggingNode.data || !draggingNode.data.code) return false;
+      if(!draggingNode.parent || !draggingNode.parent.data) return false;
+      if(draggingNode.data.custom || draggingNode.parent.data.custom) {
+        this.pnode = draggingNode.parent;
+        return true;
+      }
+      return false;
+    },
+    allowDrop(draggingNode, dropNode, type) { // type=prev, inner, next
+      if(draggingNode.level < 2) return false;
+      if(dropNode.level < 1) return false;
+      if(!draggingNode.parent || !draggingNode.data || !draggingNode.data.code) return false;
+      if(!dropNode.data || !dropNode.data.custom) return false;
+      if(!draggingNode.data.custom && !dropNode.data.code) return false;
+      if(!dropNode.data.code && !this.hasAnyRole(this.serverInfo, this.userInfo, '超级管理员')) return false;
+      if(type == "inner") {
+        return true;
+      }
+      return false;
+    },
+    handleDrop(draggingNode, dropNode, dropType, event) { // dropType=before, inner, after
+      if(dropType != "inner") return;
+      $.get("/api/v1/channel/move", {
+        serial: draggingNode.data.serial,
+        code: draggingNode.data.code,
+        pcode: dropNode.data.code,
+      }).always(() => {
+        if(this.pnode && (!this.pnode.parent || !this.pnode.parent.level)) {
+          this.treeRefresh();
+          return
+        }
+        if(!dropNode.parent || !dropNode.parent.level) {
+          this.treeRefresh();
+          return
+        }
+        this.treeNodeRefresh(dropNode.parent);
+        if(this.pnode && dropNode.parent != this.pnode.parent) {
+          this.treeNodeRefresh(this.pnode.parent);
+        }
+      });
+    }
+  }, //-- methods
 };
 </script>
 
@@ -1660,6 +1713,11 @@ a {
   @media screen and (max-width: 992px) {
     max-height:200px;
   }
+}
+
+.el-tree-node.is-drop-inner > .el-tree-node__content .custom-tree-node {
+  background-color: @base;
+  color: #fff;
 }
 </style>
 

@@ -10,10 +10,10 @@
                 </div>
             </div>
             <div :class="{'form-group':true,'has-error': errors.has('name')}">
-                <label for="input-name" class="col-sm-4 control-label">设备名称
+                <label for="input-name" class="col-sm-4 control-label">自定义名称
                 </label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input-name" name="name" v-model.trim="form.name" data-vv-as="设备名称" @keydown.enter="$el.querySelector('#input-password').focus()">
+                    <input type="text" class="form-control" id="input-name" name="name" :placeholder="form.name||'-'" v-model.trim="form.custom_name" data-vv-as="自定义名称" @keydown.enter="$el.querySelector('#input-password').focus()">
                 </div>
             </div>
             <div :class="{'form-group':true,'has-error': errors.has('password')}" v-show="useSeparateDevicePassword">
@@ -247,6 +247,7 @@ export default {
             return {
                 serial: '',
                 name: '',
+                custom_name: '',
                 media_transport: 'UDP',
                 media_transport_mode: 'passive',
                 stream_mode: '',
@@ -340,6 +341,7 @@ export default {
             // }
             var data = Object.assign({}, this.form);
             data["drop_channel_type"] = this.dropChannelTypes.join(",");
+            delete data["name"];
             if(!data['longitude']) data['longitude'] = 0;
             if(!data['latitude']) data['latitude'] = 0;
             $.get('/api/v1/device/setinfo', data).then(data => {

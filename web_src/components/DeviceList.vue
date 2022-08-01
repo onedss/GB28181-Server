@@ -54,7 +54,13 @@
                 </div>
             </template>
           </el-table-column>
-          <el-table-column prop="Name" label="名称" min-width="140" :formatter="formatName" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="Name" label="名称" min-width="140" show-overflow-tooltip>
+            <template slot-scope="props">
+              <span :class="{'text-orange': !!props.row.CustomName}" :title="props.row.CustomName ? props.row.Name||'-' : ''">
+                {{props.row.CustomName||props.row.Name||'-'}}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column prop="CommandTransport" label="信令传输" min-width="120" :formatter="formatName" v-if="hasAnyRole(serverInfo, userInfo, '管理员')" show-overflow-tooltip></el-table-column>
           <el-table-column prop="MediaTransport" label="流传输模式" min-width="140" v-if="hasAnyRole(serverInfo, userInfo, '管理员')">
             <template slot-scope="props">
@@ -319,6 +325,7 @@ export default {
       this.$refs["deviceEditDlg"].show({
         serial: row.ID,
         name: row.Name,
+        custom_name: row.CustomName,
         media_transport: row.MediaTransport,
         media_transport_mode: row.MediaTransportMode,
         stream_mode: row.StreamMode,

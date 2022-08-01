@@ -27,7 +27,7 @@
                     @change="changeDevice" @clear="clearDevice" ref="selectDevice"
                     id="input-import-serial" name="import_serial" data-vv-as="导入设备" v-validate="'required'"
                     placeholder="搜索" size="small" style="width:100%;">
-                    <el-option v-for="item in devices" :key="item.ID" :label="item.Name||item.ID" :value="item.ID">
+                    <el-option v-for="item in devices" :key="item.ID" :label="item.CustomName||item.Name||item.ID" :value="item.ID">
                     </el-option>
                 </el-select>
             </div>
@@ -188,6 +188,9 @@ export default {
                 this.form.import_serial = '';
             } else {
                 this.form.code = v;
+                if(v.length == 20 && v.substring(10, 13) != "216") {
+                    this.form.code = v.substring(0, 10) + "216" + v.substring(13);
+                }
                 this.form.import_serial = v;
                 this.$nextTick(() => {
                     this.form.custom_name = this.$refs['selectDevice'].selectedLabel;

@@ -76,7 +76,8 @@
               <el-table-column prop="ID" label="通道国标编号" min-width="200" show-overflow-tooltip sortable="custom"></el-table-column>
               <el-table-column prop="Name" label="通道名称" min-width="120" show-overflow-tooltip>
                 <template slot-scope="props">
-                  <a href="javascript:;" @click.prevent="editChannelName(props.row)" :class="{'text-orange': !!props.row.CustomName}" v-if="hasAnyRole(serverInfo, userInfo, '管理员')">
+                  <a role="button" @click.prevent="editChannelName(props.row)" :class="{'text-orange': !!props.row.CustomName}" :title="props.row.CustomName ? props.row.Name||'-' : ''"
+                    v-if="hasAnyRole(serverInfo, userInfo, '管理员')">
                     {{props.row.CustomName||props.row.Name||'-'}}
                   </a>
                   <span v-else>
@@ -100,11 +101,11 @@
                   <!-- <span v-if="props.row.SubCount > 0">-</span> -->
                   <span v-if="isDir(props.row)">-</span>
                   <span v-else-if="hasAnyRole(serverInfo, userInfo, '管理员')">
-                    <a href="javascript:;" @click.prevent="showStatusLog(props.row)" title="点击查看通道状态记录"
+                    <a role="button" @click.prevent="showStatusLog(props.row)" title="点击查看通道状态记录"
                       :class="[{'text-success': props.row.Status == 'ON', 'text-orange': !!props.row.CustomStatus, 'text-gray': (props.row.CustomStatus || props.row.Status) != 'ON'}]">
                       {{(props.row.CustomStatus || props.row.Status) == 'ON' ? "在线" : "离线"}}
                     </a>
-                    <a href="javascript:;" @click.prevent="showStreamLog(props.row)" title="点击查看通道流量统计"
+                    <a role="button" @click.prevent="showStreamLog(props.row)" title="点击查看通道流量统计"
                       :class="{'text-success': props.row.Status == 'ON', 'text-orange': !!props.row.CustomStatus, 'text-gray': (props.row.CustomStatus || props.row.Status) != 'ON'}">
                       <i class="fa fa-bar-chart"></i>
                     </a>
