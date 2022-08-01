@@ -18,7 +18,7 @@
                   发送 <i class="glyphicon glyphicon-arrow-down"></i> ：{{parseFloat(sentRate).toFixed(3)}} Mbps
               </li>
               <li v-if="serverInfo.DemoUser">
-                <a target="_blank" href="//www.liveqing.com/docs/download/LiveGBS.html"><i class="fa fa-download"></i> 下载使用</a>
+                <i class="fa fa-download"></i> 下载使用
               </li>
               <li v-if="serverInfo.DemoUser" class="hidden-xs">
                 <a target="_blank" href="/apidoc/"><i class="fa fa-book"></i> 开发接口</a>
