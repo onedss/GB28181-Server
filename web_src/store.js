@@ -56,12 +56,13 @@ const store = new Vuex.Store({
                 icon: "cogs",
                 title: "基础配置",
                 roles: ['超级管理员'],
-            }, {
-                path: "/about",
-                icon: "support",
-                title: "版本信息",
-                roles: ['超级管理员'],
-            }
+            },
+            // , {
+            //     path: "/about",
+            //     icon: "support",
+            //     title: "版本信息",
+            //     roles: ['超级管理员'],
+            // }
         ]
     },
     mutations: {
